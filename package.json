@@ -1,0 +1,22 @@
+{
+    "name": "tesp-web-sample",
+    "version": "1.0.0",
+    "description": "Tesp Labs Device Management",
+    "main": "js/app.js",
+    "scripts": {
+        "test": "grunt jasmine",
+        "build": "grunt build"
+    },
+    "author": "Tesp Labs",
+    "license": "ISC",
+    "devDependencies": {
+        "grunt": "^1.6.1",
+        "grunt-contrib-clean": "^2.0.1",
+        "grunt-contrib-compress": "^2.0.0",
+        "grunt-contrib-copy": "^1.0.0",
+        "grunt-contrib-htmlmin": "^3.1.0",
+        "grunt-contrib-jasmine": "^4.0.0",
+        "grunt-contrib-less": "^3.0.0",
+        "grunt-contrib-uglify": "^5.2.2"
+    }
+}
