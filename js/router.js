@@ -13,7 +13,7 @@ window.Router = {
             return;
         }
 
-        const hash = window.location.hash.slice(1) || 'network';
+        const hash = window.location.hash.slice(1) || 'home';
         const appContainer = document.getElementById('app');
 
         // Ensure layout is there (Header + Content Wrapper)
@@ -60,6 +60,10 @@ window.Router = {
                 }
             );
             container.appendChild(formContainer);
+        } else if (menuItem.type === 'maintenance') {
+            window.UI.renderMaintenance(container);
+        } else if (menuItem.type === 'home') {
+            window.UI.renderHome(container);
         }
     },
 

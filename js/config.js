@@ -4,27 +4,11 @@ window.appConfig = {
         logoHtml: `<div class="logo-text">tesp<span class="logo-suffix">LABS</span></div>` // Simplified logo for now
     },
     menu: [
-        // {
-        //     id: 'home',
-        //     label: 'Home',
-        //     type: 'page',
-        //     content: `
-        //         <div class="hero-section">
-        //             <h1 class="hero-title">Transform your business<br>through <span class="highlight">Our Custom Tailored</span><br><span class="highlight">Smart Interconnectivity</span> Solutions</h1>
-        //         </div>
-        //     `
-        // },
-        // {
-        //     id: 'contact',
-        //     label: 'Contact Us',
-        //     type: 'form',
-        //     title: 'Contact Information',
-        //     fields: [
-        //         { name: 'email', label: 'Email Address', type: 'email', placeholder: 'enter email' },
-        //         { name: 'website', label: 'Website', type: 'url', placeholder: 'www.tesplabs.com' },
-        //         { name: 'address', label: 'Address', type: 'textarea', placeholder: 'Enter address', rows: 4 }
-        //     ]
-        // },
+        {
+            id: 'home',
+            label: 'Home',
+            type: 'home'
+        },
         {
             id: 'network',
             label: 'Network',
@@ -36,6 +20,25 @@ window.appConfig = {
                 { name: 'subnet_mask', label: 'Subnet Mask', type: 'text', placeholder: '255.255.255.0' },
                 { name: 'gateway', label: 'Gateway', type: 'text', placeholder: '192.168.1.1' }
             ]
+        },
+        {
+            id: 'mqtt',
+            label: 'MQTT',
+            type: 'form',
+            title: 'MQTT Configuration',
+            fields: [
+                { name: 'broker', label: 'Broker URL', type: 'text', placeholder: 'mqtt://broker.hivemq.com' },
+                { name: 'port', label: 'Port', type: 'number', placeholder: '1883' },
+                { name: 'username', label: 'Username', type: 'text', placeholder: '' },
+                { name: 'password', label: 'Password', type: 'password', placeholder: '' },
+                { name: 'secured', label: 'Secured', type: 'checkbox', placeholder: '' },
+ 
+            ]
+        },
+        {
+            id: 'maintenance',
+            label: 'Maintenance',
+            type: 'maintenance'
         }
     ]
 };

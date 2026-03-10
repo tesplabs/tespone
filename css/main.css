@@ -81,6 +81,16 @@ body {
     border-color: var(--primary-color);
     box-shadow: 0 0 0 2px rgba(59, 30, 122, 0.1);
 }
+/* Override only checkbox styling */
+input[type="checkbox"].form-control {
+    width: auto;
+    height: auto;
+    margin: 0 0 0 8px;   /* moves checkbox 8px to the right */
+    padding: 0;
+    display: inline-block;
+    vertical-align: middle;
+}
+
 
 .page-header {
     margin-bottom: var(--spacing-lg);

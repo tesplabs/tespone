@@ -134,12 +134,7 @@ window.UI = {
             link.addEventListener('click', () => ul.classList.remove('show'));
         });
 
-        header.appendChild(logo);
-        header.appendChild(hamburger); // Add hamburger to header
-        header.appendChild(nav);
-
-        // Logout Button (Responsiveness: Hide on very small screens if needed, or keep)
-        // For simplicity, we keep it in the header.
+        // Logout Button
         const logoutBtn = document.createElement('button');
         logoutBtn.className = 'btn btn-secondary';
         logoutBtn.innerText = 'Logout';
@@ -147,30 +142,20 @@ window.UI = {
         logoutBtn.style.marginRight = '16px'; // Spacing for hamburger
         logoutBtn.onclick = () => window.Auth.logout();
 
-        // On mobile we might want this inside the menu, but for now let's keep it accessible.
-        // To make it look good with hamburger, we place it before hamburger?
-        // Header is flex space-between. Logo (left), Nav (center/right), Logout (right).
-        // If we want Logo - [Spacer] - Logout - Hamburger(mobile)
-
-        // Re-ordering elements for better flex behavior
-        // Create a wrapper for the right side elements
+        // Right Section Wrapper
         const rightSection = document.createElement('div');
         rightSection.className = 'header-right';
         rightSection.style.display = 'flex';
         rightSection.style.alignItems = 'center';
         rightSection.style.gap = '24px'; // Space between Nav and Logout/Hamburger
 
-        // Remove margins from Nav as we handle spacing via the wrapper gap
         nav.style.margin = '0';
         logoutBtn.style.margin = '0';
 
-        // Add elements to the wrapper
-        rightSection.appendChild(nav); // Contains ul
+        rightSection.appendChild(nav);
         rightSection.appendChild(logoutBtn);
         rightSection.appendChild(hamburger);
 
-        // Clear header to rebuild order
-        header.innerHTML = '';
         header.appendChild(logo);
         header.appendChild(rightSection);
 
@@ -198,8 +183,8 @@ window.UI = {
 
         const form = document.createElement('form');
 
-        const emailField = this.createInput({ name: 'email', label: 'Email', type: 'email', placeholder: 'user@tesplabs.com' });
-        const passField = this.createInput({ name: 'password', label: 'Password', type: 'password' });
+        const usernameField = this.createInput({ name: 'username', label: 'Username', type: 'text', placeholder: 'admin' });
+        const passField = this.createInput({ name: 'password', label: 'Password', type: 'password', placeholder: '*****' });
 
         const submitBtn = document.createElement('button');
         submitBtn.type = 'submit';
@@ -207,7 +192,7 @@ window.UI = {
         submitBtn.style.width = '100%';
         submitBtn.innerText = 'Login';
 
-        form.appendChild(emailField);
+        form.appendChild(usernameField);
         form.appendChild(passField);
         form.appendChild(submitBtn);
 
@@ -220,5 +205,222 @@ window.UI = {
         card.appendChild(form);
         loginContainer.appendChild(card);
         appContainer.appendChild(loginContainer);
+    },
+
+    renderHome(container) {
+        container.innerHTML = '';
+
+        const title = document.createElement('h2');
+        title.innerText = 'Device Information';
+        title.className = 'page-title';
+        // Add specific spacing for title
+        title.style.marginBottom = '2rem'; // More space below title
+        container.appendChild(title);
+
+        const contentDiv = document.createElement('div');
+        contentDiv.style.maxWidth = '600px';
+
+        const createInfoBlock = (label, content) => {
+            const block = document.createElement('div');
+            block.style.marginBottom = '1.5rem'; // Spacing between blocks
+
+            const labelEl = document.createElement('div');
+            // labelEl.className = 'form-label'; // Custom style instead
+            labelEl.innerText = label;
+            labelEl.style.color = 'var(--text-secondary, #666)';
+            labelEl.style.fontSize = '0.85rem';
+            labelEl.style.textTransform = 'uppercase';
+            labelEl.style.letterSpacing = '0.05em';
+            labelEl.style.fontWeight = '600';
+            labelEl.style.marginBottom = '0.5rem';
+
+            const contentEl = document.createElement('div');
+            contentEl.style.fontSize = '1.3rem'; // Much larger for visibility
+            contentEl.style.fontWeight = '500';
+            contentEl.style.color = 'var(--primary-color, #333)'; // Use brand color or dark text
+            contentEl.style.paddingBottom = '0.5rem';
+            contentEl.style.borderBottom = '1px solid rgba(0,0,0,0.05)'; // Very subtle line
+            contentEl.innerText = content;
+
+            block.appendChild(labelEl);
+            block.appendChild(contentEl);
+            return block;
+        };
+
+        contentDiv.appendChild(createInfoBlock('Device Type', 'Product Model X'));
+        contentDiv.appendChild(createInfoBlock('Firmware Version', '1.0.1'));
+        contentDiv.appendChild(createInfoBlock('Hardware Version', '1.0.0'));
+        contentDiv.appendChild(createInfoBlock('Vendor', 'Tesp Labs'));
+
+        container.appendChild(contentDiv);
+    },
+
+    renderMaintenance(container) {
+        // Clear container
+        container.innerHTML = '';
+
+        // Title (Left aligned like createForm)
+        const title = document.createElement('h2');
+        title.innerText = 'Firmware Maintenance';
+        title.className = 'page-title';
+        // title.style.marginBottom = '30px'; 
+        container.appendChild(title);
+
+        // Content Container (formerly card, now just a block)
+        const contentDiv = document.createElement('div');
+        contentDiv.style.maxWidth = '600px';
+        // Default block alignment is left, which matches snapshot
+
+        // Helper to create standardized vertical rows (Label top, Input bottom)
+        const createRow = (label, content) => {
+            const row = document.createElement('div');
+            row.className = 'form-group';
+
+            const labelEl = document.createElement('label');
+            labelEl.className = 'form-label';
+            labelEl.innerText = label;
+
+            row.appendChild(labelEl);
+            row.appendChild(content);
+            return row;
+        };
+
+        // Current Version
+        const curVerVal = document.createElement('div');
+        curVerVal.innerText = 'v1.2.3';
+        // curVerVal.className = 'form-control'; // Maybe not needed if we want plain text
+        // curVerVal.style.border = 'none';
+        curVerVal.style.padding = '8px 0'; // Slight padding for alignment
+        // curVerVal.style.fontWeight = 'bold';
+        // wrapper for text
+        const row1 = createRow('Current Version', curVerVal);
+
+        // Upgrade File Input
+        const fileInputWrapper = document.createElement('div');
+        fileInputWrapper.style.display = 'flex';
+        fileInputWrapper.style.gap = '10px';
+        fileInputWrapper.style.width = '100%';
+
+        const fileDisplay = document.createElement('input');
+        fileDisplay.type = 'text';
+        fileDisplay.readOnly = true;
+        fileDisplay.placeholder = 'Select firmware file...';
+        fileDisplay.className = 'form-control';
+
+        const selectBtn = document.createElement('button');
+        selectBtn.className = 'btn btn-primary';
+        selectBtn.innerText = 'Select File';
+        selectBtn.style.whiteSpace = 'nowrap';
+
+        const hiddenInput = document.createElement('input');
+        hiddenInput.type = 'file';
+        hiddenInput.style.display = 'none';
+
+        selectBtn.onclick = () => hiddenInput.click();
+        hiddenInput.onchange = (e) => {
+            if (e.target.files[0]) {
+                fileDisplay.value = e.target.files[0].name;
+                selectedVerDiv.innerText = 'v1.2.5'; // Simulate version parsing
+            }
+        };
+
+        fileInputWrapper.appendChild(fileDisplay);
+        fileInputWrapper.appendChild(selectBtn);
+        const row2 = createRow('Upgrade File', fileInputWrapper);
+
+        // Selected FW Version
+        const selectedVerDiv = document.createElement('div');
+        selectedVerDiv.style.padding = '8px 0';
+        selectedVerDiv.innerText = '-';
+        const row3 = createRow('Selected FW Version', selectedVerDiv);
+
+        // Upgrade Button
+        const upgradeBtn = document.createElement('button');
+        upgradeBtn.className = 'btn btn-primary';
+        upgradeBtn.innerText = 'Upgrade';
+        // Standard button, no special width
+
+        // Actions Wrapper to match form actions
+        const actions = document.createElement('div');
+        actions.className = 'form-actions';
+        actions.style.marginTop = '24px';
+        actions.style.display = 'flex';
+        actions.style.gap = '16px';
+        actions.appendChild(upgradeBtn);
+
+        // Progress Bar
+        const progressContainer = document.createElement('div');
+        progressContainer.style.display = 'none';
+        progressContainer.style.marginTop = '20px';
+        progressContainer.style.background = '#e0e0e0';
+        progressContainer.style.borderRadius = '4px';
+        progressContainer.style.overflow = 'hidden';
+        progressContainer.style.height = '24px';
+        progressContainer.style.position = 'relative';
+
+        const progressBar = document.createElement('div');
+        progressBar.style.width = '0%';
+        progressBar.style.height = '100%';
+        progressBar.style.backgroundColor = 'var(--primary-light)';
+        progressBar.style.transition = 'width 0.2s';
+
+        const progressText = document.createElement('span');
+        progressText.innerText = 'Upgrading...';
+        progressText.style.position = 'absolute';
+        progressText.style.width = '100%';
+        progressText.style.textAlign = 'center';
+        progressText.style.top = '0';
+        progressText.style.lineHeight = '24px';
+        progressText.style.color = '#fff';
+        progressText.style.fontSize = '12px';
+        progressText.style.fontWeight = 'bold';
+        progressText.style.textShadow = '0px 0px 2px rgba(0,0,0,0.5)';
+
+        progressContainer.appendChild(progressBar);
+        progressContainer.appendChild(progressText);
+
+        // Status Message
+        const statusMsg = document.createElement('div');
+        statusMsg.style.marginTop = '15px';
+        statusMsg.style.color = 'var(--success-color, #388e3c)';
+        statusMsg.style.fontWeight = 'bold';
+        statusMsg.style.display = 'none';
+
+        // Event Logic
+        upgradeBtn.onclick = () => {
+            if (!fileDisplay.value) {
+                alert('Please select a file first.');
+                return;
+            }
+            progressContainer.style.display = 'block';
+            upgradeBtn.disabled = true;
+            upgradeBtn.classList.add('disabled');
+            statusMsg.style.display = 'none';
+
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += 5;
+                progressBar.style.width = progress + '%';
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    statusMsg.innerText = 'Status: Success';
+                    statusMsg.style.display = 'block';
+                    upgradeBtn.disabled = false;
+                    upgradeBtn.classList.remove('disabled');
+                    progressText.innerText = 'Done';
+                }
+            }, 100);
+        };
+
+        // Assemble
+        // Note: Title is added to container
+        contentDiv.appendChild(row1);
+        contentDiv.appendChild(row2);
+        contentDiv.appendChild(row3);
+        contentDiv.appendChild(actions);
+        contentDiv.appendChild(progressContainer);
+        contentDiv.appendChild(statusMsg);
+
+        container.appendChild(contentDiv);
     }
 };
