@@ -10,9 +10,10 @@ module.exports = function (grunt) {
                 return [
                     'js/config.js',
                     'js/ui.js',
+                    'js/httpservices.js',
                     'js/auth.js',
                     'js/router.js',
-                    'js/app.js'
+                    'js/app.js',
                 ];
             }
         };
@@ -34,6 +35,7 @@ module.exports = function (grunt) {
             files: [
                 'js/config.js',
                 'js/ui.js',
+                'js/httpservices.js',
                 'js/auth.js',
                 'js/router.js',
                 'js/app.js'

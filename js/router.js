@@ -6,9 +6,29 @@ window.Router = {
 
     handleRoute() {
         if (!window.Auth.isAuthenticated()) {
-            window.UI.renderLogin(document.getElementById('app'), () => {
-                window.Auth.login('user', 'pass'); // Mock login
-                this.forceReload();
+            window.UI.renderLogin(document.getElementById('app'), async () => {
+                const app = document.getElementById('app');
+                const username = app.querySelector('input[name="username"]').value;
+                const password = app.querySelector('input[name="password"]').value;
+                const result = await window.Auth.login(username, password);
+                
+                if (result.success) {
+                    this.forceReload();
+                } else {
+                    // Show error message below the form
+                    let err = app.querySelector('.login-error');
+                    if (!err) {
+                        err = document.createElement('div');
+                        err.className = 'login-error';
+                        err.style.color = 'red';
+                        err.style.marginTop = '12px';
+                        app.querySelector('form').appendChild(err);
+                    }
+                    // Show inner message if present, else fallback
+                    const errorMsg = (result && result.message && result.message.message) ? result.message.message : result.message;
+                    console.error('Login failed:', errorMsg);
+                    err.textContent = errorMsg;
+                }
             });
             return;
         }
