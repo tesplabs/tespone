@@ -14,6 +14,7 @@ module.exports = function (grunt) {
                     'js/auth.js',
                     'js/router.js',
                     'js/app.js',
+                    'js/api-mapper.js'
                 ];
             }
         };

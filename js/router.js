@@ -74,16 +74,42 @@ window.Router = {
                     alert('Settings saved! (Check console for payload)');
                 },
                 () => {
-                    // Cancel action: just reload the form (which resets it) or empty logic
-                    // The UI.createForm already attaches a reset listener, but we can also re-render
                     console.log('Form cancelled/reset');
                 }
             );
             container.appendChild(formContainer);
+            // Fetch and map API data for this form if api property exists
+            if (typeof loadAndMapForm === 'function' && menuItem.api) {
+                loadAndMapForm(menuItem.id);
+            }
         } else if (menuItem.type === 'maintenance') {
             window.UI.renderMaintenance(container);
-        } else if (menuItem.type === 'home') {
-            window.UI.renderHome(container);
+        } else if (menuItem.type === 'display') {
+            // If API is specified, fetch data, else render with empty/default
+            if (menuItem.api) {
+                // Get access token from Auth module if available
+                let accessToken = '';
+                if (window.Auth && typeof window.Auth.getAccessToken === 'function') {
+                    accessToken = window.Auth.getAccessToken();
+                } else if (window.Auth && window.Auth.token) {
+                    accessToken = window.Auth.token;
+                }
+                fetch(menuItem.api, {
+                    headers: {
+                        'Accept': 'application/json',
+                        ...(accessToken ? { 'Authorization': 'Bearer ' + accessToken } : {})
+                    }
+                })
+                    .then(res => res.ok ? res.json() : {})
+                    .then(data => {
+                        window.UI.renderReadonly(container, menuItem, data);
+                    })
+                    .catch(() => {
+                        window.UI.renderReadonly(container, menuItem, {});
+                    });
+            } else {
+                window.UI.renderReadonly(container, menuItem, {});
+            }
         }
     },
 

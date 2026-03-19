@@ -20,6 +20,13 @@ window.UI = {
                 option.innerText = opt;
                 input.appendChild(option);
             });
+        } else if (field.type === 'checkbox') {
+            input = document.createElement('input');
+            input.type = 'checkbox';
+            // If placeholder is 'yes' or 'true', set checked by default
+            if (field.placeholder && (field.placeholder.toLowerCase() === 'yes' || field.placeholder.toLowerCase() === 'true')) {
+                input.checked = true;
+            }
         } else {
             input = document.createElement('input');
             input.type = field.type || 'text';
@@ -28,7 +35,7 @@ window.UI = {
         input.className = 'form-control';
         input.name = field.name;
         input.id = field.name;
-        if (field.placeholder) input.placeholder = field.placeholder;
+        if (field.placeholder && field.type !== 'checkbox') input.placeholder = field.placeholder;
 
         div.appendChild(label);
         div.appendChild(input);
@@ -90,7 +97,38 @@ window.UI = {
         container.appendChild(form);
         return container;
     },
-
+     // Generic readonly display renderer
+    renderReadonly(container, config, data = {}) {
+        container.innerHTML = '';
+        if (config.title) {
+            const title = document.createElement('h2');
+            title.innerText = config.title;
+            title.className = 'page-title';
+            title.style.marginBottom = '2rem';
+            container.appendChild(title);
+        }
+        const contentDiv = document.createElement('div');
+        contentDiv.style.maxWidth = '600px';
+        config.fields.forEach(field => {
+            const block = document.createElement('div');
+            block.style.marginBottom = '1.5rem';
+            const labelEl = document.createElement('div');
+            labelEl.innerText = field.label || field.name;
+            labelEl.style.color = 'var(--text-secondary, #666)';
+            labelEl.style.fontSize = '0.85rem';
+            labelEl.style.textTransform = 'uppercase';
+            labelEl.style.letterSpacing = '0.05em';
+            const valueEl = document.createElement('div');
+            valueEl.innerText = (data && data[field.name] !== undefined) ? data[field.name] : '';
+            valueEl.style.fontSize = '1.1rem';
+            valueEl.style.fontWeight = '500';
+            valueEl.style.color = '#222';
+            block.appendChild(labelEl);
+            block.appendChild(valueEl);
+            contentDiv.appendChild(block);
+        });
+        container.appendChild(contentDiv);
+    },
     renderLayout(appContainer, menuItems, contentCallback) {
         appContainer.innerHTML = '';
 

@@ -1,3 +1,4 @@
+
 const fs = require('fs');
 const http = require('http');
 const https = require('https');
@@ -60,6 +61,69 @@ app.get('/', (req, res) => {
   res.send('Server is running');
 });
 
+// Ethernet Configuration API endpoint
+// Helper to parse cookies from request headers
+function parseCookies(req) {
+  const list = {};
+  const rc = req.headers['cookie'];
+  if (rc) {
+    rc.split(';').forEach(cookie => {
+      const parts = cookie.split('=');
+      list[parts.shift().trim()] = decodeURI(parts.join('='));
+    });
+  }
+  return list;
+}
+
+app.get('/api/ethernetconfiguration', (req, res) => {
+  // Check for SID cookie
+  const cookies = parseCookies(req);
+  const sid = cookies['SID'];
+  if (!sid) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+  // In production, validate the SID token here
+  // For demo, accept any non-empty SID
+  res.setHeader('Content-Type', 'application/json');
+  res.json({
+    mode: 'DHCP',
+    ipAddress: '192.168.1.100',
+    subnetMask: '255.255.255.0',
+    gateway: '192.168.1.1'
+  });
+});
+app.get('/api/mqttconfiguration', (req, res) => {
+  // Check for SID cookie
+  const cookies = parseCookies(req);
+  const sid = cookies['SID'];
+  if (!sid) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+  // Example static data (replace with DB fetch if needed)
+  res.setHeader('Content-Type', 'application/json');
+  res.json({
+    brokerUrl: 'mqtt://broker.hivemq.com',
+    port: 1883,
+    username: 'admin',
+    password: 'admin',
+    secured: 'yes'
+  });
+});
+
+app.get('/api/deviceinfo', (req, res) => {
+  const cookies = parseCookies(req);
+  const sid = cookies['SID'];
+  if (!sid) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+  res.setHeader('Content-Type', 'application/json');
+  res.json({
+    deviceType: 'Sandesh',
+    firmwareVersion: '10.2.3',
+    hardwareVersion: '1.2',
+    vendor: 'Tesplabs Pvt Ltd'
+  });
+});
 // 404 handler
 app.use((req, res, next) => {
   res.status(404).json({ error: 'Not Found' });

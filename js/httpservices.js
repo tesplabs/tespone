@@ -41,6 +41,12 @@ const http = {
 
 async function handleResponse(response) {
   const contentType = response.headers.get('content-type');
+  if (response.status === 401) {
+    // Unauthorized: clear auth and redirect to login
+    localStorage.removeItem('tesp_auth');
+    window.location.href = '/';
+    return; // Stop further processing
+  }
   if (!response.ok) {
     let errorText = await response.text();
     // Try to parse as JSON if possible
