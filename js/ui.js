@@ -102,7 +102,7 @@ window.UI = {
         const logo = document.createElement('div');
         logo.className = 'app-logo';
         // Importing config here might be circular if not careful, better to pass branding data
-        logo.innerHTML = `<img src="assets/A01-Header Logo.svg" alt="Tesp Labs Logo" style="height: 40px;">`;
+        logo.innerHTML = `<img src="assets/jako-muller Logo.png" alt="Tesp Labs Logo" style="height: 60px;">`;
 
         // Nav
         const nav = document.createElement('nav');
@@ -179,7 +179,7 @@ window.UI = {
 
         const logo = document.createElement('div');
         logo.className = 'login-logo';
-        logo.innerHTML = `<img src="assets/A01-Header Logo.svg" alt="Tesp Labs Logo" style="height: 60px;">`;
+        logo.innerHTML = `<img src="assets/jako-muller Logo.png" alt="Tesp Labs Logo" style="height: 60px;">`;
 
         const form = document.createElement('form');
 

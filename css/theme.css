@@ -1,6 +1,6 @@
 :root {
     /* Colors extracted/inspired by Tesp Labs screenshots */
-    --primary-color: #3b1e7a; /* Deep purple from logo */
+    --primary-color: #E53212;
     --primary-light: #6a4f9b;
     --accent-color: #d500f9; /* Pinkish-purple accent */
     --bg-color: #f8f9fa;
@@ -14,7 +14,8 @@
     --success-color: #388e3c;
 
     /* Typography */
-    --font-family: 'Roboto', sans-serif;
+    --font-family: "Poppins-Bold", "sans-serif";
+    /*--font-family: 'Roboto', sans-serif;*/
     --font-size-base: 16px;
     --font-size-lg: 1.25rem;
     --font-size-sm: 0.875rem;
