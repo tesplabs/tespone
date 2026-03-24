@@ -82,10 +82,35 @@ window.UI = {
         form.appendChild(actions);
 
         // Event Listeners
-        form.addEventListener('submit', (e) => {
+        form.addEventListener('submit', async (e) => {
             e.preventDefault();
             const formData = new FormData(form);
             const data = Object.fromEntries(formData.entries());
+            // Find API URL from config and call PUT
+            let msgDiv = form.querySelector('.form-status-msg');
+            if (!msgDiv) {
+                msgDiv = document.createElement('div');
+                msgDiv.className = 'form-status-msg';
+                msgDiv.style.marginLeft = '24px';
+                msgDiv.style.alignSelf = 'center';
+                msgDiv.style.fontWeight = 'bold';
+                actions.appendChild(msgDiv);
+            }
+            clearTimeout(msgDiv._hideTimeout);
+            if (config.api) {
+                try {
+                    await window.http.put(config.api, data);
+                    msgDiv.innerText = 'Settings saved successfully';
+                    msgDiv.style.color = '#2e7d32'; // green
+                } catch (err) {
+                    msgDiv.innerText = 'Failed to save: ' + (err && err.message ? err.message : err);
+                    msgDiv.style.color = '#c62828'; // red
+                }
+                msgDiv.style.display = 'inline-block';
+                msgDiv._hideTimeout = setTimeout(() => {
+                    msgDiv.style.display = 'none';
+                }, 5000);
+            }
             onSave(data);
         });
 
@@ -426,28 +451,130 @@ window.UI = {
 
         // Event Logic
         upgradeBtn.onclick = () => {
-            if (!fileDisplay.value) {
-                alert('Please select a file first.');
+
+            if (!hiddenInput.files[0]) {
+                statusMsg.innerText = 'Please select a file first.';
+                statusMsg.style.color = '#c62828';
+                statusMsg.style.display = 'block';
                 return;
             }
             progressContainer.style.display = 'block';
             upgradeBtn.disabled = true;
             upgradeBtn.classList.add('disabled');
+            upgradeBtn.style.opacity = '0.5';
+            upgradeBtn.style.pointerEvents = 'none';
+            upgradeBtn.style.cursor = 'not-allowed';
+            selectBtn.disabled = true;
+            selectBtn.classList.add('disabled');
+            selectBtn.style.opacity = '0.5';
+            selectBtn.style.pointerEvents = 'none';
+            selectBtn.style.cursor = 'not-allowed';
             statusMsg.style.display = 'none';
 
-            let progress = 0;
-            const interval = setInterval(() => {
-                progress += 5;
-                progressBar.style.width = progress + '%';
-                if (progress >= 100) {
-                    clearInterval(interval);
-                    statusMsg.innerText = 'Status: Success';
+            // Reset progress bar
+            progressBar.style.width = '0%';
+            progressText.innerText = 'Upgrading...';
+
+            (async () => {
+                try {
+                    // Upload firmware file
+                    const uploadUrl = '/api/firmwareupload';
+                    const formData = new FormData();
+                    formData.append('file', hiddenInput.files[0]);
+                    const uploadResp = await fetch(uploadUrl, {
+                        method: 'POST',
+                        body: formData
+                    });
+                    const uploadResult = await uploadResp.json();
+                    if (!uploadResp.ok || uploadResult.status !== 'success') {
+                        throw new Error(uploadResult.message || 'Firmware upload failed');
+                    }
+                    // Only if upload succeeded, call trigger upgrade
+                    const triggerUrl = '/api/triggerupgrade';
+                    const triggerPayload = { forceUpgrade: false };
+                    const triggerResp = await window.http.post(triggerUrl, triggerPayload);
+                    if (triggerResp.status === 'success') {
+                        statusMsg.innerText = 'Upgrade started: ' + (triggerResp.message || '');
+                        statusMsg.style.color = 'var(--success-color, #388e3c)';
+                        statusMsg.style.display = 'block';
+                        // Start polling upgrade status
+                        let polling = true;
+                        async function pollStatus() {
+                            try {
+                                const statusResp = await window.http.get('/api/upgradestatus');
+                                // Always keep buttons disabled while polling
+                                upgradeBtn.disabled = true;
+                                upgradeBtn.classList.add('disabled');
+                                selectBtn.disabled = true;
+                                selectBtn.classList.add('disabled');
+
+                                // Support both old and new backend response fields
+                                const isFailed = statusResp.status === 'error' || statusResp.upgradeStatus === 'failed' || statusResp.Status === 'Signature Verification Failure';
+                                const isSuccess = statusResp.upgradeStatus === 'success' || statusResp.Status === 'Success';
+                                if (isFailed) {
+                                    progressBar.style.width = '100%';
+                                    progressText.innerText = 'Upgrade Failed';
+                                    statusMsg.innerText = statusResp.message || statusResp.Status || 'Upgrade failed.';
+                                    statusMsg.style.color = '#c62828';
+                                    polling = false;
+                                } else if (isSuccess) {
+                                    progressBar.style.width = '100%';
+                                    progressText.innerText = 'Upgrade Complete';
+                                    statusMsg.innerText = statusResp.message || statusResp.Status || 'Upgrade successful!';
+                                    statusMsg.style.color = 'var(--success-color, #388e3c)';
+                                    polling = false;
+                                } else {
+                                    // in progress
+                                    let pct = statusResp.percentage || statusResp.Progress || 0;
+                                    progressBar.style.width = pct + '%';
+                                    progressText.innerText = `Upgrading... (${pct}%)`;
+                                    statusMsg.innerText = statusResp.message || statusResp.Status || 'Upgrade in progress...';
+                                    statusMsg.style.color = 'var(--success-color, #388e3c)';
+                                }
+                            } catch (err) {
+                                progressBar.style.width = '100%';
+                                progressText.innerText = 'Upgrade Failed';
+                                statusMsg.innerText = 'Upgrade failed: ' + (err && err.message ? err.message : err);
+                                statusMsg.style.color = '#c62828';
+                                polling = false;
+                            }
+                            if (polling) {
+                                setTimeout(pollStatus, 2000);
+                            } else {
+                                upgradeBtn.disabled = false;
+                                upgradeBtn.classList.remove('disabled');
+                                upgradeBtn.style.opacity = '';
+                                upgradeBtn.style.pointerEvents = '';
+                                upgradeBtn.style.cursor = '';
+                                selectBtn.disabled = false;
+                                selectBtn.classList.remove('disabled');
+                                selectBtn.style.opacity = '';
+                                selectBtn.style.pointerEvents = '';
+                                selectBtn.style.cursor = '';
+                            }
+                        }
+                        pollStatus();
+                    } else {
+                        throw new Error(triggerResp.message || 'Upgrade could not be started');
+                    }
+                } catch (err) {
+                    statusMsg.innerText = 'Upgrade failed: ' + (err && err.message ? err.message : err);
+                    statusMsg.style.color = '#c62828';
                     statusMsg.style.display = 'block';
+                    progressBar.style.width = '100%';
+                    progressText.innerText = 'Upgrade Failed';
                     upgradeBtn.disabled = false;
                     upgradeBtn.classList.remove('disabled');
-                    progressText.innerText = 'Done';
+                    upgradeBtn.style.opacity = '';
+                    upgradeBtn.style.pointerEvents = '';
+                    upgradeBtn.style.cursor = '';
+                    selectBtn.disabled = false;
+                    selectBtn.classList.remove('disabled');
+                    selectBtn.style.opacity = '';
+                    selectBtn.style.pointerEvents = '';
+                    selectBtn.style.cursor = '';
                 }
-            }, 100);
+            })();
         };
 
         // Assemble

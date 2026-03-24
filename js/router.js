@@ -71,7 +71,7 @@ window.Router = {
                 menuItem,
                 (data) => {
                     console.log(`[API Mock] Saving data for ${menuItem.id}:`, data);
-                    alert('Settings saved! (Check console for payload)');
+                    // alert('Settings saved! (Check console for payload)');
                 },
                 () => {
                     console.log('Form cancelled/reset');
