@@ -50,6 +50,7 @@ window.UI = {
             const title = document.createElement('h2');
             title.className = 'page-title';
             title.innerText = config.title;
+            title.style.marginBottom = '2rem';
             container.appendChild(title);
         }
 
@@ -132,17 +133,19 @@ window.UI = {
             title.style.marginBottom = '2rem';
             container.appendChild(title);
         }
-        const contentDiv = document.createElement('div');
-        contentDiv.style.maxWidth = '600px';
+            const contentDiv = document.createElement('div');
+            contentDiv.style.maxWidth = '600px';
         config.fields.forEach(field => {
             const block = document.createElement('div');
             block.style.marginBottom = '1.5rem';
             const labelEl = document.createElement('div');
             labelEl.innerText = field.label || field.name;
-            labelEl.style.color = 'var(--text-secondary, #666)';
-            labelEl.style.fontSize = '0.85rem';
-            labelEl.style.textTransform = 'uppercase';
-            labelEl.style.letterSpacing = '0.05em';
+            labelEl.style.color = '#E53212';
+            labelEl.style.fontSize = '15px';
+            labelEl.style.fontWeight = 'bold';
+            // fontStretch is deprecated and not supported in JS. Use font-family or font-variation-settings if needed.
+            labelEl.style.marginBottom = '6px';
+            labelEl.style.letterSpacing = '0.3px';
             const valueEl = document.createElement('div');
             valueEl.innerText = (data && data[field.name] !== undefined) ? data[field.name] : '';
             valueEl.style.fontSize = '1.1rem';
@@ -246,8 +249,8 @@ window.UI = {
 
         const form = document.createElement('form');
 
-        const usernameField = this.createInput({ name: 'username', label: 'Username', type: 'text', placeholder: 'admin' });
-        const passField = this.createInput({ name: 'password', label: 'Password', type: 'password', placeholder: '*****' });
+        const usernameField = this.createInput({ name: 'username', label: 'Username', type: 'text' });
+        const passField = this.createInput({ name: 'password', label: 'Password', type: 'password' });
 
         const submitBtn = document.createElement('button');
         submitBtn.type = 'submit';
@@ -290,7 +293,7 @@ window.UI = {
             const labelEl = document.createElement('div');
             // labelEl.className = 'form-label'; // Custom style instead
             labelEl.innerText = label;
-            labelEl.style.color = 'var(--text-secondary, #666)';
+            labelEl.style.color = '#E53212';
             labelEl.style.fontSize = '0.85rem';
             labelEl.style.textTransform = 'uppercase';
             labelEl.style.letterSpacing = '0.05em';
@@ -326,7 +329,7 @@ window.UI = {
         const title = document.createElement('h2');
         title.innerText = 'Firmware Maintenance';
         title.className = 'page-title';
-        // title.style.marginBottom = '30px'; 
+        title.style.marginBottom = '2rem';
         container.appendChild(title);
 
         // Content Container (formerly card, now just a block)
@@ -338,6 +341,7 @@ window.UI = {
         const createRow = (label, content) => {
             const row = document.createElement('div');
             row.className = 'form-group';
+            row.style.marginBottom = '1.5rem';
 
             const labelEl = document.createElement('label');
             labelEl.className = 'form-label';
@@ -391,11 +395,6 @@ window.UI = {
         fileInputWrapper.appendChild(selectBtn);
         const row2 = createRow('Upgrade File', fileInputWrapper);
 
-        // Selected FW Version
-        const selectedVerDiv = document.createElement('div');
-        selectedVerDiv.style.padding = '8px 0';
-        selectedVerDiv.innerText = '-';
-        const row3 = createRow('Selected FW Version', selectedVerDiv);
 
         // Upgrade Button
         const upgradeBtn = document.createElement('button');
@@ -581,7 +580,6 @@ window.UI = {
         // Note: Title is added to container
         contentDiv.appendChild(row1);
         contentDiv.appendChild(row2);
-        contentDiv.appendChild(row3);
         contentDiv.appendChild(actions);
         contentDiv.appendChild(progressContainer);
         contentDiv.appendChild(statusMsg);

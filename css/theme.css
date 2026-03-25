@@ -7,15 +7,15 @@
     --bg-gradient: linear-gradient(135deg, #fdfbfd 0%, #f4eff9 100%);
     --card-bg: #ffffff;
     --text-primary: #333333;
-    --text-secondary: #666666;
+    --text-secondary: #E53212;
     --text-light: #ffffff;
     --border-color: #e0e0e0;
     --error-color: #d32f2f;
     --success-color: #388e3c;
 
     /* Typography */
-    --font-family: "Poppins-Bold", "sans-serif";
-    /*--font-family: 'Roboto', sans-serif;*/
+    --font-family: 'Poppins', Arial, Helvetica, sans-serif;
+    /*--font-family: 'Poppins', Arial, Helvetica, sans-serif;*/
     --font-size-base: 16px;
     --font-size-lg: 1.25rem;
     --font-size-sm: 0.875rem;

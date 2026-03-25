@@ -5,14 +5,19 @@
 }
 
 body {
-    /*font-family: var(--font-family);*/
-    /*font-family: "Poppins-SemiBold", "sans-serif";*/
-    font-family: "Poppins-Bold", "sans-serif";
+    font-family: 'Poppins', Arial, sans-serif;
+    font-stretch: expanded;
     /*background: var(--bg-gradient);*/
     background: #fff;
-    color: var(--text-primary);
+    color: #333;
     line-height: 1.6;
     min-height: 100vh;
+}
+
+h1 {
+    font-weight: 600;
+    color: #E53212;
+    letter-spacing: 0.5px;
 }
 
 #app {
@@ -35,6 +40,7 @@ body {
     border-radius: 4px;
     cursor: pointer;
     font-weight: 500;
+    font-stretch: expanded;
     transition: background-color var(--transition-fast);
     font-size: var(--font-size-base);
 }
@@ -45,8 +51,7 @@ body {
 }
 
 .btn-primary:hover {
-    background-color: #c62828;
-    /*background-color: #7f6adf;*/
+    background-color: #0b3869;
 
 }
 
@@ -59,36 +64,48 @@ body {
 }
 
 .btn-secondary:hover {
-    /*background-color: #f5f5f5;*/
-    background-color: #c62828;
-    /*color: var(--text-primary);*/
+    background-color: #0b3869;
 }
 
 .form-group {
-    margin-bottom: var(--spacing-md);
+    margin-bottom: 20px;
 }
 
-.form-label {
+label {
+    font-weight: 500;
+    color: #E53212;
+    margin-bottom: 6px;
     display: block;
-    margin-bottom: var(--spacing-xs);
+    letter-spacing: 0.3px;
+}
+.form-label, h6 {
+    font-family: 'Poppins-SemiBold', sans-serif;
+    font-size: 15px;
+    font-stretch: expanded;
     font-weight: bold;
     color: #E53212;
+    margin: 0 0 10px 0;
+    display: block;
+    letter-spacing: 0.3px;
 }
 
-.form-control {
+input, select {
     width: 100%;
-    padding: var(--spacing-sm);
-    border: 1px solid var(--border-color);
+    padding: 10px 12px;
+    border: 1px solid #ddd;
     border-radius: 4px;
-    font-size: var(--font-size-base);
-    transition: border-color var(--transition-fast);
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    color: #333;
+    transition: all 0.2s ease;
 }
 
-.form-control:focus {
+input:focus, select:focus {
     outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 2px rgba(59, 30, 122, 0.1);
+    border-color: #E53212;
+    box-shadow: 0 0 0 2px rgba(229, 50, 18, 0.1);
 }
+
 /* Override only checkbox styling */
 input[type="checkbox"].form-control {
     width: auto;
@@ -137,7 +154,8 @@ input[type="checkbox"].form-control {
 
 .logo-placeholder {
     /*font-family: 'Roboto', sans-serif;*/
-    font-family: "Poppins-Bold", "sans-serif";
+    font-family: 'Poppins', Arial, Helvetica, sans-serif;
+    font-stretch: expanded;
     color: var(--primary-color);
     font-size: 24px;
 }
@@ -155,6 +173,7 @@ input[type="checkbox"].form-control {
     /*color: var(--text-secondary);*/
     color: #E53212;
     font-weight: 500;
+    font-stretch: expanded;
     text-transform: uppercase;
     font-size: 0.9rem;
     transition: color var(--transition-fast);
@@ -226,10 +245,17 @@ input[type="checkbox"].form-control {
 }
 
 .hero-title {
-    font-size: 3rem;
-    font-weight: 300;
-    color: var(--primary-light);
-    line-height: 1.2;
+    font-size: 42px;
+    font-weight: 700;
+    color: #E53212;
+    font-stretch: expanded;
+/* Hero text style */
+.hero-text {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.6;
+    color: #333;
+}
 }
 
 .highlight {
