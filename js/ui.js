@@ -219,6 +219,258 @@ window.UI = {
         logoutBtn.style.margin = '0';
 
         rightSection.appendChild(nav);
+
+        // User Profile Dropdown
+        const userProfileWrapper = document.createElement('div');
+        userProfileWrapper.className = 'user-profile-wrapper';
+        userProfileWrapper.style.position = 'relative';
+        userProfileWrapper.style.display = 'flex';
+        userProfileWrapper.style.alignItems = 'center';
+        userProfileWrapper.style.gap = '8px';
+
+        // Get username from localStorage or fallback
+        let username = localStorage.getItem('tesp_username') || 'User';
+        const userProfileBtn = document.createElement('button');
+        userProfileBtn.className = 'btn btn-profile';
+        userProfileBtn.style.display = 'flex';
+        userProfileBtn.style.alignItems = 'center';
+        userProfileBtn.style.gap = '8px';
+        userProfileBtn.style.background = 'none';
+        userProfileBtn.style.border = 'none';
+        userProfileBtn.style.color = '#333';
+        userProfileBtn.style.fontWeight = 'bold';
+        userProfileBtn.style.cursor = 'pointer';
+        userProfileBtn.style.fontSize = '1rem';
+        userProfileBtn.style.padding = '4px 12px';
+
+        // User icon (SVG)
+        const userIcon = document.createElement('span');
+        userIcon.innerHTML = `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="6.5" r="3.5" stroke="#333" stroke-width="1.5"/><path d="M3.5 16.5C3.5 13.7386 6.23858 11.5 10 11.5C13.7614 11.5 16.5 13.7386 16.5 16.5" stroke="#333" stroke-width="1.5" stroke-linecap="round"/></svg>`;
+        userIcon.style.display = 'inline-flex';
+        userIcon.style.alignItems = 'center';
+
+        // Dropdown arrow (SVG)
+        const arrowIcon = document.createElement('span');
+        arrowIcon.innerHTML = `<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 6L8 10L12 6" stroke="#333" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+        arrowIcon.style.display = 'inline-flex';
+        arrowIcon.style.alignItems = 'center';
+
+        // Username text
+        const usernameSpan = document.createElement('span');
+        usernameSpan.innerText = username;
+        usernameSpan.style.color = '#E53212';
+
+        userProfileBtn.innerHTML = '';
+        userProfileBtn.appendChild(userIcon);
+        userProfileBtn.appendChild(usernameSpan);
+        userProfileBtn.appendChild(arrowIcon);
+        userProfileBtn.style.background = 'none';
+        userProfileBtn.style.border = 'none';
+        userProfileBtn.style.color = '#333';
+        userProfileBtn.style.fontWeight = 'bold';
+        userProfileBtn.style.cursor = 'pointer';
+        userProfileBtn.style.fontSize = '1rem';
+        userProfileBtn.style.padding = '4px 12px';
+
+        // Dropdown menu
+        const dropdown = document.createElement('div');
+        dropdown.className = 'user-dropdown';
+        dropdown.style.display = 'none';
+        dropdown.style.position = 'absolute';
+        dropdown.style.top = '110%';
+        dropdown.style.right = '0';
+        dropdown.style.background = '#fff';
+        dropdown.style.boxShadow = '0 2px 8px rgba(0,0,0,0.12)';
+        dropdown.style.borderRadius = '6px';
+        dropdown.style.minWidth = '160px';
+        dropdown.style.zIndex = '1000';
+
+        // Change Password Option
+        const changePwd = document.createElement('div');
+        changePwd.innerText = 'Change Password';
+            changePwd.style.color = '#E53212';
+                changePwd.style.fontWeight = 'bold';
+            changePwd.style.whiteSpace = 'nowrap';
+        changePwd.style.padding = '12px 16px';
+        changePwd.style.cursor = 'pointer';
+        changePwd.style.fontSize = '1rem';
+        changePwd.onmouseover = () => changePwd.style.background = '#f5f5f5';
+        changePwd.onmouseout = () => changePwd.style.background = 'none';
+        changePwd.onclick = () => {
+            dropdown.style.display = 'none';
+            // Create modal overlay
+            const modalOverlay = document.createElement('div');
+            modalOverlay.style.position = 'fixed';
+            modalOverlay.style.top = '0';
+            modalOverlay.style.left = '0';
+            modalOverlay.style.width = '100vw';
+            modalOverlay.style.height = '100vh';
+            modalOverlay.style.background = 'rgba(0,0,0,0.25)';
+            modalOverlay.style.display = 'flex';
+            modalOverlay.style.alignItems = 'center';
+            modalOverlay.style.justifyContent = 'center';
+            modalOverlay.style.zIndex = '2000';
+
+            // Modal dialog
+            const modal = document.createElement('div');
+            modal.style.background = '#fff';
+            modal.style.borderRadius = '10px';
+            modal.style.boxShadow = '0 4px 24px rgba(0,0,0,0.18)';
+            modal.style.padding = '32px 28px 24px 28px';
+            modal.style.minWidth = '340px';
+            modal.style.maxWidth = '95vw';
+            modal.style.position = 'relative';
+
+            // Close button
+            const closeBtn = document.createElement('button');
+            closeBtn.innerHTML = '&times;';
+            closeBtn.style.position = 'absolute';
+            closeBtn.style.top = '12px';
+            closeBtn.style.right = '16px';
+            closeBtn.style.background = 'none';
+            closeBtn.style.border = 'none';
+            closeBtn.style.fontSize = '1.5rem';
+            closeBtn.style.cursor = 'pointer';
+            closeBtn.onclick = () => document.body.removeChild(modalOverlay);
+            modal.appendChild(closeBtn);
+
+            // Title
+            const title = document.createElement('h3');
+            title.innerText = 'Change Password';
+            title.style.color = '#E53212';
+            title.style.marginBottom = '18px';
+            modal.appendChild(title);
+
+            // Password rule
+            const rule = document.createElement('div');
+            rule.innerText = 'Password must be at least 8 characters, include a number, an uppercase, and a lowercase letter.';
+            rule.style.fontSize = '0.95rem';
+            rule.style.color = '#666';
+            rule.style.marginBottom = '18px';
+            modal.appendChild(rule);
+
+            // Form
+            const form = document.createElement('form');
+            form.style.display = 'flex';
+            form.style.flexDirection = 'column';
+            form.style.gap = '16px';
+
+            // Old password
+            const oldPwd = document.createElement('input');
+            oldPwd.type = 'password';
+            oldPwd.placeholder = 'Old Password';
+            oldPwd.required = true;
+            oldPwd.style.padding = '10px';
+            oldPwd.style.fontSize = '1rem';
+            oldPwd.style.border = '1px solid #ccc';
+            oldPwd.style.borderRadius = '4px';
+
+            // New password
+            const newPwd = document.createElement('input');
+            newPwd.type = 'password';
+            newPwd.placeholder = 'New Password';
+            newPwd.required = true;
+            newPwd.style.padding = '10px';
+            newPwd.style.fontSize = '1rem';
+            newPwd.style.border = '1px solid #ccc';
+            newPwd.style.borderRadius = '4px';
+
+            // Confirm password
+            const confirmPwd = document.createElement('input');
+            confirmPwd.type = 'password';
+            confirmPwd.placeholder = 'Confirm New Password';
+            confirmPwd.required = true;
+            confirmPwd.style.padding = '10px';
+            confirmPwd.style.fontSize = '1rem';
+            confirmPwd.style.border = '1px solid #ccc';
+            confirmPwd.style.borderRadius = '4px';
+
+            // Feedback message
+            const msg = document.createElement('div');
+            msg.style.fontSize = '0.98rem';
+            msg.style.marginTop = '4px';
+            msg.style.height = '22px';
+            msg.style.color = '#c62828';
+
+            // Buttons
+            const btnRow = document.createElement('div');
+            btnRow.style.display = 'flex';
+            btnRow.style.gap = '16px';
+            btnRow.style.marginTop = '8px';
+
+            const updateBtn = document.createElement('button');
+            updateBtn.type = 'submit';
+            updateBtn.className = 'btn btn-primary';
+            updateBtn.innerText = 'Update';
+
+            const cancelBtn = document.createElement('button');
+            cancelBtn.type = 'button';
+            cancelBtn.className = 'btn btn-secondary';
+            cancelBtn.innerText = 'Cancel';
+            cancelBtn.onclick = () => document.body.removeChild(modalOverlay);
+
+            btnRow.appendChild(updateBtn);
+            btnRow.appendChild(cancelBtn);
+
+            form.appendChild(oldPwd);
+            form.appendChild(newPwd);
+            form.appendChild(confirmPwd);
+            form.appendChild(msg);
+            form.appendChild(btnRow);
+
+            // Password validation helper
+            function validatePassword(pwd) {
+                return pwd.length >= 8 && /[a-z]/.test(pwd) && /[A-Z]/.test(pwd) && /[0-9]/.test(pwd);
+            }
+
+            form.onsubmit = async (e) => {
+                e.preventDefault();
+                msg.style.color = '#c62828';
+                msg.innerText = '';
+                if (!validatePassword(newPwd.value)) {
+                    msg.innerText = 'New password does not meet requirements.';
+                    return;
+                }
+                if (newPwd.value !== confirmPwd.value) {
+                    msg.innerText = 'Passwords do not match.';
+                    return;
+                }
+                // Provision for API call
+                updateBtn.disabled = true;
+                updateBtn.innerText = 'Updating...';
+                try {
+                    // Replace with your actual API call
+                    // Example: await window.http.post('/api/change-password', { oldPassword: oldPwd.value, newPassword: newPwd.value });
+                    await new Promise(res => setTimeout(res, 1000)); // Simulate API
+                    msg.style.color = '#2e7d32';
+                    msg.innerText = 'Password updated successfully!';
+                    setTimeout(() => document.body.removeChild(modalOverlay), 1200);
+                } catch (err) {
+                    msg.innerText = 'Failed to update password.';
+                } finally {
+                    updateBtn.disabled = false;
+                    updateBtn.innerText = 'Update';
+                }
+            };
+
+            modal.appendChild(form);
+            modalOverlay.appendChild(modal);
+            document.body.appendChild(modalOverlay);
+        };
+        dropdown.appendChild(changePwd);
+
+        userProfileBtn.onclick = (e) => {
+            e.stopPropagation();
+            dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+        };
+        document.addEventListener('click', () => {
+            dropdown.style.display = 'none';
+        });
+
+        userProfileWrapper.appendChild(userProfileBtn);
+        userProfileWrapper.appendChild(dropdown);
+
+        rightSection.appendChild(userProfileWrapper);
         rightSection.appendChild(logoutBtn);
         rightSection.appendChild(hamburger);
 

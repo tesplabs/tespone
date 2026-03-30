@@ -8,6 +8,7 @@ window.Auth = {
             const data = await window.http.post('/api/login', { username, password });
             if (data.status === 'success') {
                 localStorage.setItem('tesp_auth', 'true');
+                localStorage.setItem('tesp_username', username); // Store username for display
                 return { success: true, message: data.message, expiresIn: data.expiresIn };
             } else {
                 return { success: false, message: data.message || 'Login failed' };
@@ -29,6 +30,7 @@ window.Auth = {
             }
         }
         localStorage.removeItem('tesp_auth');
+        localStorage.removeItem('tesp_username');
         window.location.reload();
     }
 };
