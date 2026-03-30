@@ -140,7 +140,7 @@ app.get('/api/deviceinfo', (req, res) => {
   }
   res.setHeader('Content-Type', 'application/json');
   res.json({
-    deviceType: 'JMG_Control',
+    deviceType: 'JMG Control',
     firmwareVersion: '10.2.3',
     hardwareVersion: '1.2',
     vendor: 'Jakob Muller Group'

@@ -168,7 +168,7 @@ window.UI = {
         const logo = document.createElement('div');
         logo.className = 'app-logo';
         // Importing config here might be circular if not careful, better to pass branding data
-        logo.innerHTML = `<img src="assets/jako-muller Logo.png" alt="Tesp Labs Logo" style="height: 60px;">`;
+        logo.innerHTML = `<img src="assets/jako-muller-group Logo.png" alt="Tesp Labs Logo" style="height: 60px;">`;
 
         // Nav
         const nav = document.createElement('nav');
