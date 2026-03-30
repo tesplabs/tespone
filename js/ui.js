@@ -168,7 +168,7 @@ window.UI = {
         const logo = document.createElement('div');
         logo.className = 'app-logo';
         // Importing config here might be circular if not careful, better to pass branding data
-        logo.innerHTML = `<img src="assets/jako-muller Logo.png" alt="Tesp Labs Logo" style="height: 60px;">`;
+        logo.innerHTML = `<img src="assets/jako-muller-group Logo.png" alt="Tesp Labs Logo" style="height: 60px;">`;
 
         // Nav
         const nav = document.createElement('nav');
@@ -433,7 +433,7 @@ window.UI = {
         progressText.style.textAlign = 'center';
         progressText.style.top = '0';
         progressText.style.lineHeight = '24px';
-        progressText.style.color = '#fff';
+        progressText.style.color = '#333';
         progressText.style.fontSize = '12px';
         progressText.style.fontWeight = 'bold';
         progressText.style.textShadow = '0px 0px 2px rgba(0,0,0,0.5)';
@@ -444,7 +444,7 @@ window.UI = {
         // Status Message
         const statusMsg = document.createElement('div');
         statusMsg.style.marginTop = '15px';
-        statusMsg.style.color = 'var(--success-color, #388e3c)';
+        statusMsg.style.color = '#E53212';
         statusMsg.style.fontWeight = 'bold';
         statusMsg.style.display = 'none';
 
@@ -494,7 +494,7 @@ window.UI = {
                     const triggerResp = await window.http.post(triggerUrl, triggerPayload);
                     if (triggerResp.status === 'success') {
                         statusMsg.innerText = 'Upgrade started: ' + (triggerResp.message || '');
-                        statusMsg.style.color = 'var(--success-color, #388e3c)';
+                        statusMsg.style.color = '#E53212)';
                         statusMsg.style.display = 'block';
                         // Start polling upgrade status
                         let polling = true;
@@ -520,7 +520,7 @@ window.UI = {
                                     progressBar.style.width = '100%';
                                     progressText.innerText = 'Upgrade Complete';
                                     statusMsg.innerText = statusResp.message || statusResp.Status || 'Upgrade successful!';
-                                    statusMsg.style.color = 'var(--success-color, #388e3c)';
+                                    statusMsg.style.color = '#E53212)';
                                     polling = false;
                                 } else {
                                     // in progress
@@ -528,7 +528,7 @@ window.UI = {
                                     progressBar.style.width = pct + '%';
                                     progressText.innerText = `Upgrading... (${pct}%)`;
                                     statusMsg.innerText = statusResp.message || statusResp.Status || 'Upgrade in progress...';
-                                    statusMsg.style.color = 'var(--success-color, #388e3c)';
+                                    statusMsg.style.color = '#E53212)';
                                 }
                             } catch (err) {
                                 progressBar.style.width = '100%';

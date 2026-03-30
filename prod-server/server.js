@@ -150,10 +150,10 @@ app.get('/api/deviceinfo', (req, res) => {
   }
   res.setHeader('Content-Type', 'application/json');
   res.json({
-    deviceType: 'Sandesh',
+    deviceType: 'JMG Control',
     firmwareVersion: '10.2.3',
     hardwareVersion: '1.2',
-    vendor: 'Tesplabs Pvt Ltd'
+    vendor: 'Jakob Muller Group'
   });
 });
 app.post('/api/firmwareupload', upload.single('file'), (req, res) => {
