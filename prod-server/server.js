@@ -242,6 +242,18 @@ app.get('/api/upgradestatus', (req, res) => {
       percentage: upgradeProgress
     });
 });
+// Helper to parse cookies from request headers
+function parseCookies(req) {
+  const list = {};
+  const rc = req.headers['cookie'];
+  if (rc) {
+    rc.split(';').forEach(cookie => {
+      const parts = cookie.split('=');
+      list[parts.shift().trim()] = decodeURI(parts.join('='));
+    });
+  }
+  return list;
+}
 // 404 handler
 app.use((req, res, next) => {
   res.status(404).json({ error: 'Not Found' });
